@@ -1,8 +1,24 @@
 <template>
   <div id="app">
-<!--    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/> -->
+	<div class="navigation">
+		<img src="./assets/logo_blue.png" class="logo"/>
+		<p class="title">VegetableChicken</p>
+		<el-menu
+		  :default-active="activeIndex2"
+		  class="el-menu-demo"
+		  mode="horizontal"
+		  @select="handleSelect"
+		  background-color="#545c64"
+		  text-color="#fff"
+		  active-text-color="#ffd04b">
+		  <el-menu-item index="1" class="searchProcess">查询快递</el-menu-item>
+		  <el-menu-item index="2" class="myProcess">我的快递</el-menu-item>
+		</el-menu>
+		<router-link to="/Login" class="login">登录</router-link>
+		<router-link to="/Register" class="register">注册</router-link>
+	</div>
 	<MyExpress></MyExpress>
+
   </div>
 </template>
 
@@ -17,7 +33,12 @@ export default {
     HelloWorld,
 	MyExpress,
 	Register
-  }
+  },
+  methods: {
+	  handleSelect(key, keyPath) {
+	    console.log(key, keyPath);
+	  }
+  },
 }
 </script>
 
@@ -29,5 +50,84 @@ export default {
   text-align: center;
   color: #2c3e50;
   margin-top: 60px; */
+}
+.navigation {
+  position: fixed;
+  width: 100%;
+  height: 63px;
+  left: 0px;
+  top: -1px;
+  background: #545c64;
+  z-index: 5;
+}
+
+.logo {
+  position: absolute;
+  width: 38px;
+  height: 38px;
+  left: 25px;
+  top: 10px;
+}
+
+.title {
+  position: absolute;
+  width: 173px;
+  height: 33px;
+  left: 81px;
+  top: 15px;
+  margin-top: 0%;
+  font-family: Lucida Handwriting;
+  font-style: italic;
+  font-weight: normal;
+  font-size: 24px;
+  line-height: 33px;
+  color: #ffffff;
+}
+.searchProcess{
+	position: absolute;
+	width: 112px;
+	height: 24px;
+	left: 400px;
+	font-size: 18px;
+	line-height: 24px;
+	text-decoration-line: none;
+	color: #ffffff;
+	cursor:pointer;
+}
+.myProcess{
+	position: absolute;
+	width: 112px;
+	height: 24px;
+	left: 550px;
+	font-size: 18px;
+	line-height: 24px;
+	text-decoration-line: none;
+	color: #ffffff;
+	cursor:pointer;
+}
+.login {
+  position: absolute;
+  width: 88px;
+  height: 24px;
+  left: 1400px;
+  top: 17px;
+  font-size: 18px;
+  line-height: 24px;
+  text-decoration-line: none;
+  color: #ffffff;
+  cursor:pointer;
+}
+
+.register {
+  position: absolute;
+  width: 88px;
+  height: 24px;
+  left: 1450px;
+  top: 17px;
+  font-size: 18px;
+  line-height: 24px;
+  text-decoration-line: none;
+  color: #ffffff;
+  cursor:pointer;
 }
 </style>
