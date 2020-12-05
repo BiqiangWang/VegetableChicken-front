@@ -4,7 +4,7 @@
 		<img src="./assets/logo_blue.png" class="logo"/>
 		<p class="title">VegetableChicken</p>
 		<el-menu
-		  :default-active="activeIndex2"
+		  :default-active="activeIndex"
 		  class="el-menu-demo"
 		  mode="horizontal"
 		  @select="handleSelect"
@@ -12,12 +12,12 @@
 		  text-color="#fff"
 		  active-text-color="#ffd04b">
 		  <el-menu-item index="1" class="searchProcess">查询快递</el-menu-item>
-		  <el-menu-item index="2" class="myProcess">我的快递</el-menu-item>
+		  <el-menu-item index="2" class="myProcess"><router-link to="/MyExpress">我的快递</router-link></el-menu-item>
 		</el-menu>
 		<router-link to="/Login" class="login">登录</router-link>
 		<router-link to="/Register" class="register">注册</router-link>
 	</div>
-	<MyExpress></MyExpress>
+	<router-view></router-view>
 
   </div>
 </template>
@@ -38,6 +38,11 @@ export default {
 	  handleSelect(key, keyPath) {
 	    console.log(key, keyPath);
 	  }
+  },
+  data() {
+	  return {
+	    activeIndex: '1'
+	  };
   },
 }
 </script>
