@@ -3,6 +3,7 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import MyExpress from '../components/MyExpress.vue'
 import Register from '../components/Register.vue'
+import SearchExpress from '../components/SearchExpress.vue'
 
 Vue.use(Router)
 
@@ -26,6 +27,11 @@ const routes = [{
   path: '/MyExpress',
   name: 'MyExpress',
   component: MyExpress
+},
+{
+  path: '/SearchExpress',
+  name: 'SearchExpress',
+  component: SearchExpress
 },
 ]
 

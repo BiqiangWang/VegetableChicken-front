@@ -11,7 +11,7 @@
 		  background-color="#545c64"
 		  text-color="#fff"
 		  active-text-color="#ffd04b">
-		  <el-menu-item index="1" class="searchProcess">查询快递</el-menu-item>
+		  <el-menu-item index="1" class="searchProcess"><router-link to="/SearchExpress">查询快递</router-link></el-menu-item>
 		  <el-menu-item index="2" class="myProcess"><router-link to="/MyExpress">我的快递</router-link></el-menu-item>
 		</el-menu>
 		<router-link to="/Login" class="login">登录</router-link>
