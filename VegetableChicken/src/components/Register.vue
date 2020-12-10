@@ -6,7 +6,7 @@
 		<div id="register_area">
 			<el-row></el-row>
 			<el-row>
-				<div id="register_title">注册</div>
+				<div id="register_title">加入VegetableChicken</div>
 			</el-row>
 			<el-row></el-row>
 			<!-- 			<el-row>
@@ -190,9 +190,11 @@
 
 	#register_title {
 		font-family: Microsoft YaHei;
-		font-weight: bold;
-		font-size: 44px;
-		line-height: 24px;
+		font-weight: bold;	
+		font-size: 24px;
+		line-height: 32px;
+		
+		color: #535151;
 	}
 
 	/* 	#register_accounttext{

@@ -13,9 +13,9 @@
 		  active-text-color="#ffd04b">
 		  <el-menu-item index="1" class="searchProcess"><router-link to="/SearchExpress">查询快递</router-link></el-menu-item>
 		  <el-menu-item index="2" class="myProcess"><router-link to="/MyExpress">我的快递</router-link></el-menu-item>
+		  <el-menu-item index="3" class="login"><router-link to="/Login">登录</router-link></el-menu-item>
+		  <el-menu-item index="4" class="register"><router-link to="/Register">注册</router-link></el-menu-item>
 		</el-menu>
-		<router-link to="/Login" class="login">登录</router-link>
-		<router-link to="/Register" class="register">注册</router-link>
 	</div>
 	<router-view></router-view>
 
@@ -112,10 +112,9 @@ export default {
 }
 .login {
   position: absolute;
-  width: 88px;
+  width:78px;
   height: 24px;
-  left: 1400px;
-  top: 17px;
+  left: 1350px;
   font-size: 18px;
   line-height: 24px;
   text-decoration-line: none;
@@ -125,10 +124,9 @@ export default {
 
 .register {
   position: absolute;
-  width: 88px;
+  width: 78px;
   height: 24px;
-  left: 1450px;
-  top: 17px;
+  left: 1430px;
   font-size: 18px;
   line-height: 24px;
   text-decoration-line: none;
