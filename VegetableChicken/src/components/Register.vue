@@ -70,6 +70,8 @@
 			var checkAccount = (rule, value, callback) => {
 				if (value === '') {
 					callback(new Error('请输入用户名'));
+				} else {
+					callback();
 				}
 			};
 			var validatePass = (rule, value, callback) => {
@@ -108,10 +110,6 @@
 				}, 1000);
 			};
 			return {
-				input_account: '',
-				input_password: '',
-				input_passwordagain: '',
-				input_phonenumber: '',
 				ruleForm: {
 					pass: '',
 					checkPass: '',
@@ -138,11 +136,15 @@
 				},
 			}
 		},
+		created:function(){
+			
+		},
 		methods: {
 			submitForm(formName) {
 				this.$refs[formName].validate((valid) => {
 					if (valid) {
 						alert('submit!');
+						this.Register(this.ruleForm.account,this.ruleForm.pass);
 					} else {
 						console.log('error submit!!');
 						return false;
@@ -151,7 +153,33 @@
 			},
 			resetForm(formName) {
 				this.$refs[formName].resetFields();
-			}
+			},
+			Register(input_account,input_password){               //注册
+				var account = input_account;
+				var password = input_password;
+				// var headerToken=this.token;
+				this.REajax = new XMLHttpRequest();
+				this.REajax.open("GET", "http://localhost:8701/register?username="+account+"&userpwd="+password, true);
+				this.REajax.setRequestHeader('Authorization','Bearer ');
+				this.REajax.onreadystatechange = this.REsuccessfully;
+				this.REajax.send();		
+			},
+			REsuccessfully(){             //注册附属函数
+				if (this.REajax.readyState == 4 && this.REajax.status == 200) {
+					console.log(this.REajax.responseText);	
+					if(this.REajax.responseText==0){
+						this.$alert('注册成功！', '提示', {
+						confirmButtonText: '确定'
+					   });									
+					}				
+					// if(JSON.parse(this.REajax.responseText).returnFlag==1){
+					// 	this.$alert('注册成功！', '提示', {
+					// 	confirmButtonText: '确定'
+					//    });									
+				 //    }
+					
+			    }
+			},
 		}
 	}
 </script>
