@@ -4,6 +4,7 @@ import Router from 'vue-router'
 import MyExpress from '../components/MyExpress.vue'
 import Register from '../components/Register.vue'
 import SearchExpress from '../components/SearchExpress.vue'
+import Login from '../components/Login.vue'
 
 Vue.use(Router)
 
@@ -32,6 +33,11 @@ const routes = [{
   path: '/SearchExpress',
   name: 'SearchExpress',
   component: SearchExpress
+},
+{
+  path: '/Login',
+  name: 'Login',
+  component: Login
 },
 ]
 

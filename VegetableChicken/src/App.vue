@@ -11,10 +11,10 @@
 		  background-color="#545c64"
 		  text-color="#fff"
 		  active-text-color="#ffd04b">
-		  <el-menu-item index="1" class="searchProcess"><router-link to="/SearchExpress">查询快递</router-link></el-menu-item>
-		  <el-menu-item index="2" class="myProcess"><router-link to="/MyExpress">我的快递</router-link></el-menu-item>
-		  <el-menu-item index="3" class="login"><router-link to="/Login">登录</router-link></el-menu-item>
-		  <el-menu-item index="4" class="register"><router-link to="/Register">注册</router-link></el-menu-item>
+		  <el-menu-item index="1" class="searchProcess"><router-link tag="div" to="/SearchExpress">查询快递</router-link></el-menu-item>
+		  <el-menu-item index="2" class="myProcess"><router-link tag="div" to="/MyExpress">我的快递</router-link></el-menu-item>
+		  <el-menu-item index="3" class="login"><router-link tag="div" to="/Login">登录</router-link></el-menu-item>
+		  <el-menu-item index="4" class="register"><router-link tag="div" to="/Register">注册</router-link></el-menu-item>
 		</el-menu>
 	</div>
 	<router-view></router-view>
