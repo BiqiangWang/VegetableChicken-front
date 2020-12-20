@@ -3,6 +3,8 @@
 		<el-row>
 			<img alt="Vue logo" src='../assets/logo_blue.png'>
 		</el-row>
+		<el-alert v-if="isRegisterSuccessfully===false" title="注册错误!" type="error" show-icon></el-alert>
+		<el-alert v-else-if="isRegisterSuccessfully===true" title="注册成功，正在跳转!" type="success" show-icon></el-alert>
 		<div id="register_area">
 			<el-row></el-row>
 			<el-row>
@@ -110,6 +112,7 @@
 				}, 1000);
 			};
 			return {
+				isRegisterSuccessfully: undefined,
 				ruleForm: {
 					pass: '',
 					checkPass: '',
@@ -138,6 +141,24 @@
 		},
 		created:function(){
 			
+		},
+		watch: {
+			isRegisterSuccessfully: function(newIsRegisterSuccessfully, oldIsRegisterSuccessfully) {
+				var router = this.$router
+				console.log('new' + newIsRegisterSuccessfully + 'old' + oldIsRegisterSuccessfully);
+				if (newIsRegisterSuccessfully === false) {
+					setTimeout(function() {
+						this.isRegisterSuccessfully = undefined
+						console.log(this.isRegisterSuccessfully)
+					}, 10);
+				} else if (newIsRegisterSuccessfully === true) {
+					console.log('run in son!')
+					console.log('origin ' + this.input_account + 'psw: ' + this.input_password)
+					setTimeout(function() {
+						router.replace('/Login')
+					}, 1500)
+				}
+			}
 		},
 		methods: {
 			submitForm(formName) {
@@ -168,19 +189,22 @@
 				if (this.REajax.readyState == 4 && this.REajax.status == 200) {
 					console.log(this.REajax.responseText);	
 					if(this.REajax.responseText==0){
+						this.isRegisterSuccessfully=true;
 						this.$alert('注册成功！', '提示', {
-						confirmButtonText: '确定'
-					   });									
+						confirmButtonText: '确定',
+					   });						
+					}else {
+						this.isRegisterSuccessfully=false;
 					}				
 					// if(JSON.parse(this.REajax.responseText).returnFlag==1){
 					// 	this.$alert('注册成功！', '提示', {
 					// 	confirmButtonText: '确定'
 					//    });									
 				 //    }
-					
 			    }
 			},
 		}
+		
 	}
 </script>
 
