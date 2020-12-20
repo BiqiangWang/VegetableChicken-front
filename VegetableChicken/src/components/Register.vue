@@ -58,7 +58,7 @@
 			</el-form>
 			<el-row>
 				<el-button id="register_button" type="primary" @click="submitForm('ruleForm')">注册</el-button>
-				<el-button id="register_button" type="primary">去登录</el-button>
+				<el-button id="register_button" type="primary"><router-link tag="div" to="/Login">去登录</router-link></el-button>
 			</el-row>
 		</div>
 	</div>
