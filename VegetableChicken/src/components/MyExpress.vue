@@ -53,9 +53,26 @@
 		<el-col :span="8">
 			<div id="myExpress_right">
 				<div id="myExpress_advertising">
-					<a href="https://www.taobao.com/">
-					<img id="myExpress_advertising_photo" border="0" src="../assets/taobao.jpg" />
-					</a>
+					<el-tabs v-model="activeName" @tab-click="handleClick">
+					    <el-tab-pane label="菜鸡精选" name="first">
+							<el-carousel :interval="5000" arrow="nerver" indicator-position="outside">
+							  <el-carousel-item v-for="(item,index) in VGselected" :key="index">
+							    <a :href="item.link">
+									<img class="myExpress_advertising_photo" :src="item.url"/>
+								</a>
+							  </el-carousel-item>
+							</el-carousel>
+						</el-tab-pane>
+					    <el-tab-pane label="猜你喜欢" name="second">
+							<el-carousel :interval="5000" arrow="nerver" indicator-position="outside">
+							  <el-carousel-item v-for="(item,index) in VGsuggest" :key="index">
+							    <a :href="item.link">
+									<img class="myExpress_advertising_photo" :src="item.url"/>
+								</a>
+							  </el-carousel-item>
+							</el-carousel>
+						</el-tab-pane>
+					  </el-tabs>
 				</div>
 			</div>
 		</el-col>
@@ -71,6 +88,7 @@
 				shipped:0,
 				received:1,
 				evaluate:0,
+				activeName: 'first',
 				express:[
 					{
 						id:1,
@@ -86,7 +104,40 @@
 						commodity:"天猫|专营店c++巴拉巴拉巴拉巴拉巴拉巴拉",
 						position:"【申通快递】:上海转运中心"
 					}
+				],
+				VGselected:[
+					{
+						url:require('../assets/logo_white.png'),
+						link:"http://www.w3school.com.cn/"
+					},
+					{
+						url:require('../assets/logo_blue.png'),
+						link:"http://www.w3school.com.cn/"
+					},
+					{
+						url:require('../assets/taobao.jpg'),
+						link:"taobao.com"
+					}
+				],
+				VGsuggest:[
+					{
+						url:require('../assets/good.png'),
+						link:"http://www.w3school.com.cn/"
+					},
+					{
+						url:require('../assets/logo_blue.png'),
+						link:"http://www.w3school.com.cn/"
+					},
+					{
+						url:require('../assets/jingdong.jpg'),
+						link:"http://www.w3school.com.cn/"
+					}
 				]
+			}
+		},
+		methods:{
+			handleClick(tab, event) {
+			    console.log(tab, event);
 			}
 		}
 	}
@@ -218,14 +269,33 @@
 		width: 340px;
 		margin-left: 80px;
 	}
+	#myExpress_advertising_title{
+		margin-top: 120px;
+	}
 	#myExpress_advertising{
 		margin-top: 80px;
 		border-radius: 20px;
-		border: 1px solid #e4eaee;
 	}
-	#myExpress_advertising_photo{
-		width: 300px;
-		height: 200px;
-		
+	.myExpress_advertising_photo{
+		height: 330px;
+		width: 340px;
+		border-radius: 20px;
+	}
+	.el-carousel__item h3 {
+	    color: #475669;
+	    font-size: 18px;
+	    opacity: 0.75;
+	    line-height: 300px;
+	    margin: 0;
+	  }  
+	.el-carousel__item:nth-child(2n) {
+	    background-color: #99a9bf;
+	  }
+	  
+	.el-carousel__item:nth-child(2n+1) {
+	    background-color: #d3dce6;
+	  }
+	.el-carousel__item{
+		border-radius: 20px;
 	}
 </style>
