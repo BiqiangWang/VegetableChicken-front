@@ -11,38 +11,6 @@
 				<div id="register_title">加入VegetableChicken</div>
 			</el-row>
 			<el-row></el-row>
-			<!-- 			<el-row>
-				<el-col :span="8" :push="2">
-					<div id="register_accounttext">请输入用户名：</div>
-				</el-col>
-				<el-col :span="8" :push="2">
-					<el-input id="register_account" v-model="input_account" placeholder="请输入内容"></el-input>
-				</el-col>
-			</el-row>
-			<el-row>
-				<el-col :span="8" :push="2">
-					<div id="register_passwordtext">请输入密码：</div>
-				</el-col>
-				<el-col :span="8" :push="2">
-					<el-input id="register_password" placeholder="请输入密码" v-model.trim="input_password" show-password></el-input>
-				</el-col>
-			</el-row>
-			<el-row>
-				<el-col :span="8" :push="2">
-					<div id="register_passwordtextagain">请再次输入密码：</div>
-				</el-col>
-				<el-col :span="8" :push="2">
-					<el-input id="register_passwordagain" placeholder="请再次输入密码" v-model.trim="input_passwordagain" show-password></el-input>
-				</el-col>
-			</el-row>
-			<el-row>
-				<el-col :span="8" :push="2">
-					<div id="register_phonetext">请输入手机号：</div>
-				</el-col>
-				<el-col :span="8" :push="2">
-					<el-input id="register_phone" v-model="input_phonenumber" placeholder="请输入手机号"></el-input>
-				</el-col>
-			</el-row> -->
 			<el-form id="register_passwordarea" :model="ruleForm" status-icon :rules="rules" ref="ruleForm" label-width="200px"
 			 class="demo-ruleForm">
 				<el-form-item label="请输入用户名:" prop="account">

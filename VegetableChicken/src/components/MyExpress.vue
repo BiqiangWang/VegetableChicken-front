@@ -5,7 +5,7 @@
 				<div id="myExpress_user_info">
 					<div id="myExpress_info_up">
 						<el-col :span="8" :push="1">
-							<p id="myExpress_id">{{nick_name}}({{user_id}})</p>
+							<p id="myExpress_id">{{nick_name}}(cid:{{user_id}})</p>
 						</el-col>
 						<el-col :span="6" :push="9">
 							<el-button id="myExpress_personal">个人中心</el-button>
@@ -41,9 +41,9 @@
 								<img class="express_photo" src='../assets/logo_blue.png' />
 							</el-col>
 							<div class="express_right">
-								<div class="express_state">{{item.state}}</div>
-								<div class="express_commodity">{{item.commodity}}</div>
-								<div class="express_position">{{item.position}}</div>
+								<div class="express_state">{{item.expressstatus}}</div>
+								<div class="express_commodity">{{item.expressstore}}</div>
+								<div class="express_position">{{item.expressposition}}</div>
 							</div>
 						</div>
 					</div>
@@ -83,28 +83,36 @@
 	export default {
 		data(){
 			return {
-				user_id:"cn1234567",
+				user_id:"1",
 				nick_name:"panpan",
 				shipped:0,
-				received:1,
+				received:0,
 				evaluate:0,
 				activeName: 'first',
-				express:[
-					{
-						id:1,
-						photo:"",
-						state:"已签收",
-						commodity:"淘宝|学术英语与论文写作xxxxxxxxxxxxx",
-						position:"【百世快递】:客户已取件"
-					},
-					{
-						id:2,
-						photo:"",
-						state:"运输中",
-						commodity:"天猫|专营店c++巴拉巴拉巴拉巴拉巴拉巴拉",
-						position:"【申通快递】:上海转运中心"
-					}
-				],
+				// express:[
+				// 	{
+				// 		id:1,
+				// 		photo:"",
+				// 		state:"已签收",
+				// 		commodity:"淘宝|学术英语与论文写作xxxxxxxxxxxxx",
+				// 		position:"【百世快递】:客户已取件"
+				// 	},
+				// 	{
+				// 		id:2,
+				// 		photo:"",
+				// 		state:"运输中",
+				// 		commodity:"天猫|专营店c++巴拉巴拉巴拉巴拉巴拉巴拉",
+				// 		position:"【申通快递】:上海转运中心"
+				// 	},
+				// 	{
+				// 		id:3,
+				// 		photo:"",
+				// 		state:"运输中",
+				// 		commodity:"天猫|专营店c++巴拉巴拉巴拉巴拉巴拉巴拉",
+				// 		position:"【申通快递】:上海转运中心"
+				// 	}
+				// ],
+				express:[],
 				VGselected:[
 					{
 						url:require('../assets/logo_white.png'),
@@ -135,11 +143,44 @@
 				]
 			}
 		},
+		created:function(){
+			this.getExpressList();
+		},
 		methods:{
 			handleClick(tab, event) {
 			    console.log(tab, event);
-			}
-		}
+			 },
+			 
+			 getExpressList(){
+			 	var userid = this.user_id;
+			 	this.GELajax = new XMLHttpRequest();
+			 	this.GELajax.open("GET", "http://localhost:8705/myexpresslist?userid="+userid, true);
+			 	this.GELajax.setRequestHeader('Authorization','Bearer ');
+			 	this.GELajax.onreadystatechange = this.GELsuccessfully;
+			 	this.GELajax.send();	
+			 },
+			 GELsuccessfully(){             //注册附属函数
+			 	if (this.GELajax.readyState == 4 && this.GELajax.status == 200) {
+			 		console.log(this.GELajax.responseText);	
+			 		console.log(JSON.parse(this.GELajax.responseText));
+					if(JSON.parse(this.GELajax.responseText).code==20000){
+						console.log(JSON.parse(this.GELajax.responseText).data);
+						this.express = JSON.parse(this.GELajax.responseText).data.items;
+						length=JSON.parse(this.GELajax.responseText).data.items.length;
+						for(var i = 0; i < length; i++){
+							if(JSON.parse(this.GELajax.responseText).data.items[i].expressstatus == "运输中"){
+								this.received++;
+							}
+							else if(JSON.parse(this.GELajax.responseText).data.items[i].expressstatus == "已签收"){
+								this.evaluate++;
+							}
+						}
+						
+					}
+			    }
+			},
+		},
+		
 	}
 </script>
 
