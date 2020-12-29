@@ -37,13 +37,20 @@
 					</div>
 					<div id="myExpress_express_list">
 						<div class="express_item" v-for="item in express" :key="item.id">
-							<el-col :span="4">
-								<img class="express_photo" src='../assets/logo_blue.png' />
-							</el-col>
-							<div class="express_right">
-								<div class="express_state">{{item.expressstatus}}</div>
-								<div class="express_commodity">{{item.expressstore}}</div>
-								<div class="express_position">{{item.expressposition}}</div>
+							<div class="express_id_box">
+								<div class="express_id">
+									快递单号：{{item.expressid}}
+								</div>
+							</div>
+							<div class="express_under">
+								<el-col :span="4">
+									<img class="express_photo" src='../assets/logo_blue.png' />
+								</el-col>
+								<div class="express_right">
+									<div class="express_state">{{item.expressstatus}}</div>
+									<div class="express_commodity">{{item.expressstore}}</div>
+									<div class="express_position">{{item.expressposition}}</div>
+								</div>
 							</div>
 						</div>
 					</div>
@@ -57,9 +64,9 @@
 					    <el-tab-pane label="菜鸡精选" name="first">
 							<el-carousel :interval="5000" arrow="nerver" indicator-position="outside">
 							  <el-carousel-item v-for="(item,index) in VGselected" :key="index">
-							    <a :href="item.link">
-									<img class="myExpress_advertising_photo" :src="item.url"/>
-								</a>
+								  <a :href="item.link">
+								  	<img class="myExpress_advertising_photo" :src="item.url"/>
+								  </a>
 							  </el-carousel-item>
 							</el-carousel>
 						</el-tab-pane>
@@ -72,7 +79,7 @@
 							  </el-carousel-item>
 							</el-carousel>
 						</el-tab-pane>
-					  </el-tabs>
+					</el-tabs>
 				</div>
 			</div>
 		</el-col>
@@ -89,62 +96,47 @@
 				received:0,
 				evaluate:0,
 				activeName: 'first',
-				// express:[
-				// 	{
-				// 		id:1,
-				// 		photo:"",
-				// 		state:"已签收",
-				// 		commodity:"淘宝|学术英语与论文写作xxxxxxxxxxxxx",
-				// 		position:"【百世快递】:客户已取件"
-				// 	},
-				// 	{
-				// 		id:2,
-				// 		photo:"",
-				// 		state:"运输中",
-				// 		commodity:"天猫|专营店c++巴拉巴拉巴拉巴拉巴拉巴拉",
-				// 		position:"【申通快递】:上海转运中心"
-				// 	},
-				// 	{
-				// 		id:3,
-				// 		photo:"",
-				// 		state:"运输中",
-				// 		commodity:"天猫|专营店c++巴拉巴拉巴拉巴拉巴拉巴拉",
-				// 		position:"【申通快递】:上海转运中心"
-				// 	}
-				// ],
 				express:[],
+				index:0,
 				VGselected:[
 					{
 						url:require('../assets/logo_white.png'),
-						link:"http://www.w3school.com.cn/"
+						link:"http://www.w3school.com.cn/",
+						title:""
 					},
 					{
 						url:require('../assets/logo_blue.png'),
-						link:"http://www.w3school.com.cn/"
+						link:"http://www.w3school.com.cn/",
+						title:""
 					},
 					{
 						url:require('../assets/taobao.jpg'),
-						link:"taobao.com"
+						link:"taobao.com",
+						title:""
 					}
 				],
 				VGsuggest:[
 					{
 						url:require('../assets/good.png'),
-						link:"http://www.w3school.com.cn/"
+						link:"http://www.w3school.com.cn/",
+						title:""
 					},
 					{
 						url:require('../assets/logo_blue.png'),
-						link:"http://www.w3school.com.cn/"
+						link:"http://www.w3school.com.cn/",
+						title:""
 					},
 					{
 						url:require('../assets/jingdong.jpg'),
-						link:"http://www.w3school.com.cn/"
+						link:"http://www.w3school.com.cn/",
+						title:""
 					}
 				]
 			}
 		},
 		created:function(){
 			this.getExpressList();
+			this.getad();
 		},
 		methods:{
 			handleClick(tab, event) {
@@ -176,6 +168,26 @@
 							}
 						}
 						
+					}
+			    }
+			},
+			getad(){
+			 	var userid = this.user_id;
+			 	this.GADajax = new XMLHttpRequest();
+			 	this.GADajax.open("GET", "http://localhost:8707/ad?keyword="+"菜鸡", true);
+			 	this.GADajax.setRequestHeader('Authorization','Bearer ');
+			 	this.GADajax.onreadystatechange = this.GADsuccessfully;
+			 	this.GADajax.send();	
+			 },
+			 GADsuccessfully(){            
+			 	if (this.GADajax.readyState == 4 && this.GADajax.status == 200) {
+			 		// console.log(this.GADajax.responseText);	
+			 		console.log(JSON.parse(this.GADajax.responseText).data);
+					console.log(JSON.parse(this.GADajax.responseText).data.list)
+					for(var i=0; i<3; i++){
+						this.VGselected[i].url=JSON.parse(this.GADajax.responseText).data.list[i].marketingMainPic;
+						this.VGselected[i].link=JSON.parse(this.GADajax.responseText).data.list[i].itemLink;
+						this.VGselected[i].title=JSON.parse(this.GADajax.responseText).data.list[i].dtitle;
 					}
 			    }
 			},
@@ -266,15 +278,26 @@
 	}
 	.express_item{
 		margin-bottom: 20px;
-		height:130px;
+		height:160px;
 		border-radius: 10px;
 		border-style: solid;
 		border-color: #e4eaee;
+	}
+	.express_id_box{
+		background-color: #e4eaee;
+	}
+	.express_id{
+		text-align: left;
+		font-size: 18px;
+		font-family: Microsoft YaHei;
+		line-height: 30px;
+		margin-left: 30px;
 	}
 	.express_photo{
 		width: 130px;
 		height: 130px;
 		border-radius: 10px;
+		border-top-left-radius: 0px;
 	}
 	.express_right{
 		width: 530px;
@@ -321,6 +344,9 @@
 		height: 330px;
 		width: 340px;
 		border-radius: 20px;
+	}
+	.myExpress_advertising_info{
+		position: relative;
 	}
 	.el-carousel__item h3 {
 	    color: #475669;
