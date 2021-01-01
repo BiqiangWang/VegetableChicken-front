@@ -39,7 +39,7 @@
 		methods: {
 			login() {
 				this.ajax = new XMLHttpRequest();
-				this.ajax.open("GET", "http://localhost:8701/login?username=" + this.input_account + "&userpwd=" + this.input_password,
+				this.ajax.open("GET", "http://localhost:8701/user/login?username=" + this.input_account + "&userpwd=" + this.input_password,
 					true);
 				this.ajax.setRequestHeader('Authorization', 'Bearer ');
 				this.ajax.onreadystatechange = this.loginSuccessfully;

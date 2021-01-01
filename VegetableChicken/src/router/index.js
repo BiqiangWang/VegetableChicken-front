@@ -5,6 +5,11 @@ import MyExpress from '../components/MyExpress.vue'
 import Register from '../components/Register.vue'
 import SearchExpress from '../components/SearchExpress.vue'
 import Login from '../components/Login.vue'
+import ExpressInfo from '../components/ExpressInfo.vue'
+import MySpace from '../components/MySpace.vue'
+// import MyInfo from '../components/MyInfo'
+// import infoManage from '../components/infoManage'
+// import myPackage from '../components/myPackage'
 
 Vue.use(Router)
 
@@ -39,6 +44,33 @@ const routes = [{
   name: 'Login',
   component: Login
 },
+    {
+        path: '/ExpressInfo',
+        name: 'ExpressInfo',
+        component: ExpressInfo
+    },
+	{
+	  path: '/MySpace',
+	  name: 'MySpace',
+	  component: MySpace
+	},
+// {
+//   path: '/MyInfo',
+//   name: 'MyInfo',
+//   component: MyInfo,
+//   children: [
+//     {
+//       path:'/infoManage',
+//       name:'infoManage',
+//       component:infoManage
+//     },
+//     {
+//       path:'/myPackage',
+//       name:'myPackage',
+//       component:myPackage
+//     }
+//   ]
+// },
 ]
 
 export default new Router({

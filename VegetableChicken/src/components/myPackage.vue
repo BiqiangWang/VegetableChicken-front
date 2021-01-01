@@ -1,0 +1,21 @@
+<template>
+    <div>   
+            <el-table :data="express">
+                <el-table-column
+                prop="timestamp"
+                label="时间">
+                </el-table-column>
+                <el-table-column
+                prop="packname"
+                label="快递名称">
+                </el-table-column>
+                <el-table-column
+                prop="address"
+                label="地址">
+            </el-table-column>  
+                <el-table-column
+                label="快递公司">
+                </el-table-column>
+            </el-table>
+    </div>
+</template>

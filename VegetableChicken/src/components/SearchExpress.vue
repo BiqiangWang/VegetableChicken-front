@@ -16,7 +16,7 @@
 					<el-input id="searchExpress_input" v-model="input" placeholder="输入单号"></el-input>
 				</el-col>
 				<el-col :span="4">
-					<el-button id="searchExpress_btn" type="primary">查快递</el-button>
+					<router-link :to="{path:'/ExpressInfo',query:{ExpressInfoExpressid:input,ExpressInfoExpressCompany:value}}"><el-button id="searchExpress_btn" type="primary">查快递</el-button></router-link>
 				</el-col>
 			</el-row>
 			</div>
@@ -33,16 +33,16 @@
 					value: '选项1',
 					label: '自动识别'
 				}, {
-					value: '选项2',
+					value: 'YTO',
 					label: '圆通'
 				}, {
-					value: '选项3',
+					value: 'STO',
 					label: '申通'
 				}, {
-					value: '选项4',
+					value: 'HTKY',
 					label: '百世'
 				}, {
-					value: '选项5',
+					value: 'HHTT',
 					label: '天天'
 				}],
 				value: ''

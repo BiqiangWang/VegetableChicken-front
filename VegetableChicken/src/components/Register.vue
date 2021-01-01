@@ -133,7 +133,7 @@
 				this.$refs[formName].validate((valid) => {
 					if (valid) {
 						alert('submit!');
-						this.Register(this.ruleForm.account,this.ruleForm.pass);
+						this.Register(this.ruleForm.account,this.ruleForm.pass,this.ruleForm.phone);
 					} else {
 						console.log('error submit!!');
 						return false;
@@ -143,12 +143,13 @@
 			resetForm(formName) {
 				this.$refs[formName].resetFields();
 			},
-			Register(input_account,input_password){               //注册
+			Register(input_account,input_password,input_phone){               //注册
 				var account = input_account;
 				var password = input_password;
+				var phone = input_phone
 				// var headerToken=this.token;
 				this.REajax = new XMLHttpRequest();
-				this.REajax.open("GET", "http://localhost:8701/register?username="+account+"&userpwd="+password, true);
+				this.REajax.open("GET", "http://localhost:8701/user/register?username="+account+"&userpwd="+password+"&userphone="+phone, true);
 				this.REajax.setRequestHeader('Authorization','Bearer ');
 				this.REajax.onreadystatechange = this.REsuccessfully;
 				this.REajax.send();		

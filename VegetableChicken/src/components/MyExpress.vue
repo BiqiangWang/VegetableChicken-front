@@ -8,7 +8,7 @@
 							<p id="myExpress_id">{{nick_name}}(cid:{{user_id}})</p>
 						</el-col>
 						<el-col :span="6" :push="9">
-							<el-button id="myExpress_personal">个人中心</el-button>
+							<router-link :to="{path:'/MySpace'}"><el-button id="myExpress_personal">个人中心</el-button></router-link>
 						</el-col>
 					</div>
 					<div id="myExpress_info_down">
@@ -37,11 +37,13 @@
 					</div>
 					<div id="myExpress_express_list">
 						<div class="express_item" v-for="item in express" :key="item.id">
+							<router-link :to="{path:'/ExpressInfo',query:{ExpressInfoExpressid:item.expressid,ExpressInfoExpressCompany:item.companyid}}">
 							<div class="express_id_box">
 								<div class="express_id">
-									快递单号：{{item.expressid}}
+									快递单号：{{item.expressid}}&emsp;&emsp;&emsp;&emsp;快递公司：{{item.companyid}}
 								</div>
 							</div>
+							</router-link>
 							<div class="express_under">
 								<el-col :span="4">
 									<img class="express_photo" src='../assets/logo_blue.png' />
@@ -137,6 +139,7 @@
 		created:function(){
 			this.getExpressList();
 			this.getad();
+			this.getad2();
 		},
 		methods:{
 			handleClick(tab, event) {
@@ -146,15 +149,15 @@
 			 getExpressList(){
 			 	var userid = this.user_id;
 			 	this.GELajax = new XMLHttpRequest();
-			 	this.GELajax.open("GET", "http://localhost:8705/myexpresslist?userid="+userid, true);
+			 	this.GELajax.open("GET", "http://localhost:8705/express/myexpresslist?userid="+userid, true);
 			 	this.GELajax.setRequestHeader('Authorization','Bearer ');
 			 	this.GELajax.onreadystatechange = this.GELsuccessfully;
 			 	this.GELajax.send();	
 			 },
 			 GELsuccessfully(){             //注册附属函数
 			 	if (this.GELajax.readyState == 4 && this.GELajax.status == 200) {
-			 		console.log(this.GELajax.responseText);	
-			 		console.log(JSON.parse(this.GELajax.responseText));
+			 		// console.log(this.GELajax.responseText);	
+			 		// console.log(JSON.parse(this.GELajax.responseText));
 					if(JSON.parse(this.GELajax.responseText).code==20000){
 						console.log(JSON.parse(this.GELajax.responseText).data);
 						this.express = JSON.parse(this.GELajax.responseText).data.items;
@@ -174,20 +177,38 @@
 			getad(){
 			 	var userid = this.user_id;
 			 	this.GADajax = new XMLHttpRequest();
-			 	this.GADajax.open("GET", "http://localhost:8707/ad?keyword="+"菜鸡", true);
+			 	this.GADajax.open("GET", "http://localhost:8707/ad/ad?title="+"菜鸡", true);
 			 	this.GADajax.setRequestHeader('Authorization','Bearer ');
 			 	this.GADajax.onreadystatechange = this.GADsuccessfully;
 			 	this.GADajax.send();	
 			 },
 			 GADsuccessfully(){            
 			 	if (this.GADajax.readyState == 4 && this.GADajax.status == 200) {
-			 		// console.log(this.GADajax.responseText);	
-			 		console.log(JSON.parse(this.GADajax.responseText).data);
+			 		// console.log(JSON.parse(this.GADajax.responseText).data);
 					console.log(JSON.parse(this.GADajax.responseText).data.list)
 					for(var i=0; i<3; i++){
 						this.VGselected[i].url=JSON.parse(this.GADajax.responseText).data.list[i].marketingMainPic;
 						this.VGselected[i].link=JSON.parse(this.GADajax.responseText).data.list[i].itemLink;
 						this.VGselected[i].title=JSON.parse(this.GADajax.responseText).data.list[i].dtitle;
+					}
+			    }
+			},
+			getad2(){
+			 	var userid = this.user_id;
+			 	this.GAD2ajax = new XMLHttpRequest();
+			 	this.GAD2ajax.open("GET", "http://localhost:8707/ad/ad?title="+"神仙水", true);
+			 	this.GAD2ajax.setRequestHeader('Authorization','Bearer ');
+			 	this.GAD2ajax.onreadystatechange = this.GAD2successfully;
+			 	this.GAD2ajax.send();	
+			 },
+			 GAD2successfully(){            
+			 	if (this.GAD2ajax.readyState == 4 && this.GADajax.status == 200) {
+			 		// console.log(JSON.parse(this.GAD2ajax.responseText).data);
+					console.log(JSON.parse(this.GAD2ajax.responseText).data.list)
+					for(var i=0; i<3; i++){
+						this.VGsuggest[i].url=JSON.parse(this.GAD2ajax.responseText).data.list[i].marketingMainPic;
+						this.VGsuggest[i].link=JSON.parse(this.GAD2ajax.responseText).data.list[i].itemLink;
+						this.VGsuggest[i].title=JSON.parse(this.GAD2ajax.responseText).data.list[i].dtitle;
 					}
 			    }
 			},
@@ -197,6 +218,12 @@
 </script>
 
 <style>
+	a {
+	  text-decoration: none;
+	}
+	.router-link-active {
+	  text-decoration: none;
+	}
 	#myExpress_page{
 		width: 100%;
 		height: 1000px;
@@ -292,6 +319,7 @@
 		font-family: Microsoft YaHei;
 		line-height: 30px;
 		margin-left: 30px;
+		color: #5500ff;
 	}
 	.express_photo{
 		width: 130px;
