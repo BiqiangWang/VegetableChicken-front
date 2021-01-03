@@ -3,10 +3,25 @@
     <div class="map-collect">
       <div id="container" class="map" tabindex="0"></div>
 
-      <el-button class="collect" @click="collect">收藏此快递</el-button>
+      <el-button class="collect" v-if="isCollect === 0" @click="collect"
+        >收藏此快递</el-button
+      >
+      <el-button
+        type="danger"
+        plain
+        class="collect"
+        v-if="isCollect === 1"
+        @click="cancelCollect"
+        >取消收藏</el-button
+      >
     </div>
     <div class="info-box">
-      <div class="code">快递单号：{{ id }} &emsp; 快递公司：{{expresscompany}}</div>
+      <div class="code">
+        快递单号：{{ id }} &emsp; 快递公司：{{ expresscompany }}
+      </div>
+      <div class="code" style="margin-top: 30px">
+        快递状态：{{ expressStatus }}
+      </div>
       <el-container class="info" v-for="message in messages">
         <el-aside style="width: 100px">
           <div class="time">{{ message.time.time }}</div>
@@ -27,6 +42,8 @@
 export default {
   data() {
     return {
+      sign: 0,
+      userid: 1,
       length: 0,
       center: [108.152601, 30.193629],
       path: [],
@@ -35,8 +52,10 @@ export default {
       geocoder: "",
       polyline: "",
       status: [],
+      expressStatus: "",
+      isCollect: 0,
       id: "11111111111111111111111",
-	  expresscompany:"",
+      expresscompany: "",
       messages: [],
       address: ["北京市朝阳区阜荣街10号"],
 
@@ -60,47 +79,54 @@ export default {
   },
 
   methods: {
-	  getQuery: function () {
-	    this.id = this.$route.query.ExpressInfoExpressid;
-		this.expresscompany = this.$route.query.ExpressInfoExpressCompany;
-	  },
+    getQuery: function () {
+      this.id = this.$route.query.ExpressInfoExpressid;
+      this.expresscompany = this.$route.query.ExpressInfoExpressCompany;
+    },
+
     geoCode(address, i) {
       this.geocoder.getLocation(address, (status, result) => {
         if (status === "complete" && result.geocodes.length) {
           var lnglat = result.geocodes[0].location;
           var temp = [lnglat.lng, lnglat.lat];
-          this.path[i] = temp;
+          this.path.push(temp);
 
           // this.polyline.setPath(this.path);
-
-          if (this.path.length == this.length) {
-            this.polyline.setPath(this.path);
-          }
 
           var marker = new AMap.Marker();
           marker.setPosition(lnglat);
           this.markerList.push(marker);
           this.map.add(marker);
-
-          // var done = true;
-          // for (var i = 0; i < this.status.length; i++) {
-          //     done &= this.status[i];
-          // }
-          // if (done) {
-          //     console.log(this.path);
-          //     console.log("1");
-          // }
         } else {
           console.log("根据地址查询位置失败");
           this.length--;
-          if (this.path.length == this.length) {
-            this.polyline.setPath(this.path);
-          }
+        }
+        if (this.path.length == this.length && i == this.address.length - 1) {
+          this.polyline.setPath(this.path);
+          this.map.setFitView([this.polyline]);
+        }
+        if (i < this.address.length - 1) {
+          this.geoCode(this.address[i + 1], i + 1);
         }
       });
     },
 
     processData() {
+      switch (this.response.State) {
+        case "0":
+          break;
+        case "1":
+          this.expressStatus = "未发货";
+          break;
+        case "2":
+          this.expressStatus = "运输中";
+          break;
+        case "3":
+          this.expressStatus = "已签收";
+          break;
+        case "4":
+          break;
+      }
       for (var i = 0; i < this.response.Traces.length; i++) {
         var str = "";
         for (var j = 0; j < this.response.Traces[i].AcceptStation.length; j++) {
@@ -129,17 +155,24 @@ export default {
         this.messages[i].time.time = date[1];
         this.messages[i].info = this.response.Traces[i].AcceptStation;
         this.id = this.response.LogisticCode;
+
         this.$set(this.messages);
       }
+
+      this.messages.reverse();
 
       // for (var i = 0; i < this.address.length; i++) {
       //     this.status[i] = false;
       // }
 
       this.length = this.address.length;
-      for (var i = 0; i < this.address.length; i++) {
-        this.geoCode(this.address[i], i);
-      }
+
+      // for (var i = 0; i < this.address.length; i++) {
+      //   // console.log(this.address[i]);
+      //   // setTimeout(()=>{this.geoCode(this.address[i], i)},100*i);
+      //   this.geoCode(this.address[i], i);
+      // }
+      this.geoCode(this.address[0], 0);
     },
 
     getInfo(num, id) {
@@ -159,8 +192,111 @@ export default {
         )
         .then((response) => {
           this.response = response.data;
-		  console.log(response)
-          this.processData();
+          console.log(response);
+          if (this.response.Success == true) {
+            this.processData();
+          } else {
+            this.$alert(
+              "无法根据您提供的单号搜索到快递，请检查单号是否输入正确！",
+              "搜索失败",
+              {
+                confirmButtonText: "确定",
+                callback: (action) => {
+                  this.$router.push({ path: "/SearchExpress" });
+                },
+              }
+            );
+          }
+        });
+    },
+
+    iscollect() {
+      var url = "http://localhost:8705/express/ismyexpress";
+      this.$http
+        .get(
+          url,
+          {
+            params: {
+              expressid: this.id,
+              userid: this.userid,
+            },
+          },
+          {
+            emulateJSON: true,
+          }
+        )
+        .then((response) => {
+          this.isCollect = response.data;
+        });
+    },
+
+    collect() {
+      var url = "http://localhost:8705/express/addexpress";
+      console.log(this.messages[0].info);
+      this.$http
+        .get(
+          url,
+          {
+            params: {
+              companyid: this.expresscompany,
+              expressdetail: this.messages[0].info,
+              expressid: this.id,
+              expressstatus: this.expressStatus,
+              userid: this.userid,
+            },
+          },
+          {
+            emulateJSON: true,
+          }
+        )
+        .then((response) => {
+          if (response.data === 1) {
+            this.$message({
+              showClose: true,
+              message: "收藏成功！",
+              type: "success",
+            });
+            this.isCollect = 1;
+          } else if (response.data === 0) {
+            this.$message({
+              showClose: true,
+              message: "收藏失败！",
+              type: "erro",
+            });
+          }
+        });
+    },
+
+    cancelCollect() {
+      var url = "http://localhost:8705/express/deleteexpress";
+      this.$http
+        .get(
+          url,
+          {
+            params: {
+              expressid: this.id,
+              userid: this.userid,
+            },
+          },
+          {
+            emulateJSON: true,
+          }
+        )
+        .then((response) => {
+          if (response.data === 1) {
+            this.$message({
+              showClose: true,
+              message: "取消收藏成功！",
+              type: "success",
+            });
+            this.isCollect = 0;
+          } else if (response.data === 0) {
+            this.$message({
+              showClose: true,
+              message: "取消收藏失败！",
+              type: "erro",
+            });
+          }
         });
     },
   },
@@ -195,10 +331,11 @@ export default {
       zIndex: 50,
     });
     this.polyline.setMap(this.map);
-	this.getQuery();
+    this.getQuery();
 
     this.getInfo(this.id, this.expresscompany);
 
+    this.iscollect();
   },
 };
 </script>
@@ -213,7 +350,6 @@ export default {
 }
 
 .map {
-	
   width: 400px;
   height: 400px;
 }

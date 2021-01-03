@@ -44,7 +44,7 @@
 			return {
 				hasNewMessage: false,
 				activeIndex: '3',
-				islogin:true,
+				islogin:false,
 			}
 		},
 		created: function() {
