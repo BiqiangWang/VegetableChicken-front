@@ -7,6 +7,7 @@ import SearchExpress from '../components/SearchExpress.vue'
 import Login from '../components/Login.vue'
 import ExpressInfo from '../components/ExpressInfo.vue'
 import MySpace from '../components/MySpace.vue'
+import TbExpress from '../components/TbExpress.vue'
 // import MyInfo from '../components/MyInfo'
 // import infoManage from '../components/infoManage'
 // import myPackage from '../components/myPackage'
@@ -53,6 +54,11 @@ const routes = [{
 	  path: '/MySpace',
 	  name: 'MySpace',
 	  component: MySpace
+	},
+	{
+	  path: '/TbExpress',
+	  name: 'TbExpress',
+	  component: TbExpress
 	},
 // {
 //   path: '/MyInfo',

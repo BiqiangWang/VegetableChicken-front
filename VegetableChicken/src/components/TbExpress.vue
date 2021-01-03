@@ -50,7 +50,7 @@
 								</el-col>
 								<div class="express_right">
 									<div class="express_state">{{item.expressstatus}}</div>
-									<div class="express_commodity">{{item.expressstore}}</div>
+									<div class="express_commodity">{{item.expressTitle}}</div>
 									<div class="express_position">{{item.expressposition}}</div>
 								</div>
 							</div>
@@ -94,12 +94,12 @@
 			return {
 				user_id:"1",
 				nick_name:"panpan",
-				shipped:0,
-				received:0,
-				evaluate:0,
+				shipped: 0,
+				received: 0,
+				evaluate: 0,
 				activeName: 'first',
 				express:[],
-				index:0,
+				index: 0,
 				VGselected:[
 					{
 						url:require('../assets/logo_white.png'),
@@ -147,9 +147,9 @@
 			 },
 			 
 			 getExpressList(){
-			 	var userid = this.user_id;
+			 	var userid = 1;
 			 	this.GELajax = new XMLHttpRequest();
-			 	this.GELajax.open("GET", "http://localhost:8705/express/myexpresslist?userid="+userid, true);
+			 	this.GELajax.open("GET", "http://localhost:8710/tb/myexpresslist?userid="+userid, true);
 			 	this.GELajax.setRequestHeader('Authorization','Bearer ');
 			 	this.GELajax.onreadystatechange = this.GELsuccessfully;
 			 	this.GELajax.send();	
@@ -196,7 +196,7 @@
 			getad2(){
 			 	var userid = this.user_id;
 			 	this.GAD2ajax = new XMLHttpRequest();
-			 	this.GAD2ajax.open("GET", "http://localhost:8707/ad/ad?title="+"朵朵", true);
+			 	this.GAD2ajax.open("GET", "http://localhost:8707/ad/ad?title="+"神仙水", true);
 			 	this.GAD2ajax.setRequestHeader('Authorization','Bearer ');
 			 	this.GAD2ajax.onreadystatechange = this.GAD2successfully;
 			 	this.GAD2ajax.send();	
