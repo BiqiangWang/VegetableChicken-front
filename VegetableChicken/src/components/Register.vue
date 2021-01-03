@@ -132,7 +132,7 @@
 			submitForm(formName) {
 				this.$refs[formName].validate((valid) => {
 					if (valid) {
-						alert('submit!');
+						// alert('submit!');
 						this.Register(this.ruleForm.account,this.ruleForm.pass,this.ruleForm.phone);
 					} else {
 						console.log('error submit!!');
@@ -149,8 +149,8 @@
 				var phone = input_phone
 				// var headerToken=this.token;
 				this.REajax = new XMLHttpRequest();
-				this.REajax.open("GET", "http://localhost:8701/user/register?username="+account+"&userpwd="+password+"&userphone="+phone, true);
-				this.REajax.setRequestHeader('Authorization','Bearer ');
+				this.REajax.open("GET", "http://localhost:8712/user/register?username="+account+"&userpwd="+password+"&userphone="+phone, true);
+				// this.REajax.setRequestHeader('Authorization','Bearer ');
 				this.REajax.onreadystatechange = this.REsuccessfully;
 				this.REajax.send();		
 			},
