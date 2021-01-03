@@ -50,6 +50,8 @@
 					if (JSON.parse(this.ajax.responseText) == 0) {
 						this.isLoginSuccessfully = true;
 						console.log(this.isLoginSuccessfully);
+						this.$emit("changestate")
+						this.$emit("getuserid",1)
 					} else if (JSON.parse(this.ajax.responseText) == -1) {
 						this.isLoginSuccessfully = false;
 						console.log(this.isLoginSuccessfully);

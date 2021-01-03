@@ -92,7 +92,7 @@
 	export default {
 		data(){
 			return {
-				user_id:"1",
+				user_id:1,
 				nick_name:"panpan",
 				shipped: 0,
 				received: 0,
@@ -137,15 +137,19 @@
 			}
 		},
 		created:function(){
-			this.getExpressList();
+			this.getid();
 			this.getad();
 			this.getad2();
+			this.getExpressList();
 		},
 		methods:{
 			handleClick(tab, event) {
 			    console.log(tab, event);
 			 },
-			 
+			 getid(){
+			 	console.log("taobao"+this.$parent.userid);
+			 	this.user_id=this.$parent.userid;
+			 },
 			 getExpressList(){
 			 	var userid = 1;
 			 	this.GELajax = new XMLHttpRequest();

@@ -4,10 +4,10 @@
       <p v-on:click="switchToAccountInfo()" style="cursor: pointer">账号信息</p>
     </el-card>
     <el-card class="box-card" :class="['sideBar2']" style="width: 200px">
-      <p v-on:click="switchToStar()" style="cursor: pointer">我的关注</p>
+      <p v-on:click="switchToStar()" style="cursor: pointer">...</p>
     </el-card>
     <el-card class="box-card" :class="['sideBar3']" style="width: 200px">
-      <p v-on:click="switchToFans()" style="cursor: pointer">我的粉丝</p>
+      <p v-on:click="switchToFans()" style="cursor: pointer">...</p>
     </el-card>
     <el-card class="box-card" :class="['sideBar4']" style="width: 200px">
     </el-card>
@@ -19,6 +19,16 @@
         <AccountInfo v-if="toDisplay === 1"></AccountInfo>
         <MyStar v-if="toDisplay === 2"></MyStar>
         <MyFans v-if="toDisplay === 3"></MyFans>
+		<p style="position: absolute; left: 320px; top: 200px" :class="['word']">
+		  绑定淘宝：
+		</p>
+		<el-switch
+		  v-model="istaobao"
+		  @change="changestate"
+		  active-color="#13ce66"
+		  inactive-color="#ff4949"
+		  style="position: absolute; left: 420px; top: 223px"
+		></el-switch>
       </div>
     </el-card>
   </div>
@@ -31,25 +41,38 @@ export default {
   components: {
     AccountInfo,
   },
-  data: function () {
+  data() {
     return {
       mySpaceTitle: "个人空间管理>账号信息",
       toDisplay: 1,
+	  userid:1,
+	  istaobao:false,
     };
   },
+  created:function(){
+  	this.getid();
+  },
   methods: {
+	  getid(){
+		  console.log("hello"+this.$parent.userid);
+		  this.userid=this.$parent.userid;
+	  },
+	  changestate(){
+	  		  console.log(11111);
+	  		  this.$emit("changetaobao");
+	  },
     switchToAccountInfo: function () {
       this.mySpaceTitle = "个人空间管理>账号信息";
       this.toDisplay = 1;
       console.log("账号信息" + this.toDisplay);
     },
     switchToStar: function () {
-      this.mySpaceTitle = "个人空间管理>我的关注";
+      this.mySpaceTitle = "个人空间管理>...";
       this.toDisplay = 2;
       console.log("我的关注" + this.toDisplay);
     },
     switchToFans: function () {
-      this.mySpaceTitle = "个人空间管理>我的粉丝";
+      this.mySpaceTitle = "个人空间管理>...";
       this.toDisplay = 3;
       console.log("我的粉丝" + this.toDisplay);
     },
@@ -72,7 +95,6 @@ Vue.component("MyFans", {
 <style>
 .main1 {
   margin: 0 auto;
-  width: 100%;
   background-color: #b23535;
 }
 
@@ -86,7 +108,7 @@ Vue.component("MyFans", {
   width: 1015px;
   height: 600px;
   left: 305px;
-  top: 515px;
+  top: 165px;
 }
 .word {
   font-family: Microsoft YaHei;
@@ -97,7 +119,7 @@ Vue.component("MyFans", {
   width: 1015px;
   height: 60px;
   left: 305px;
-  top: 450px;
+  top: 100px;
 
   background: #f9f8f8;
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
@@ -113,7 +135,7 @@ Vue.component("MyFans", {
 .sideBar1 {
   position: absolute;
   left: 100px;
-  top: 450px;
+  top: 100px;
 
   font-family: Microsoft YaHei;
   font-style: normal;
@@ -131,7 +153,7 @@ Vue.component("MyFans", {
 .sideBar2 {
   position: absolute;
   left: 100px;
-  top: 515px;
+  top: 165px;
 
   font-family: Microsoft YaHei;
   font-style: normal;
@@ -149,7 +171,7 @@ Vue.component("MyFans", {
 .sideBar3 {
   position: absolute;
   left: 100px;
-  top: 580px;
+  top: 230px;
 
   font-family: Microsoft YaHei;
   font-style: normal;
@@ -167,7 +189,7 @@ Vue.component("MyFans", {
 .sideBar4 {
   position: absolute;
   left: 100px;
-  top: 650px;
+  top: 300px;
 
   font-family: Microsoft YaHei;
   font-style: normal;

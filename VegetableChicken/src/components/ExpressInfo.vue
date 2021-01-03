@@ -22,7 +22,7 @@
       <div class="code" style="margin-top: 30px">
         快递状态：{{ expressStatus }}
       </div>
-      <el-container class="info" v-for="message in messages">
+      <!-- <el-container class="info" v-for="message in messages">
         <el-aside style="width: 100px">
           <div class="time">{{ message.time.time }}</div>
           <div class="date">{{ message.time.date }}</div>
@@ -30,7 +30,20 @@
         <el-main class="main-info" style="width: 500px">
           {{ message.info }}
         </el-main>
-      </el-container>
+      </el-container> -->
+
+      <el-timeline style="margin-top: 30px; margin-right: 10px">
+        <el-timeline-item
+          v-for="message in messages"
+          :timestamp="message.time.date + ' ' + message.time.time"
+          :color="message.color"
+          placement="top"
+        >
+          <el-card>
+            {{ message.info }}
+          </el-card>
+        </el-timeline-item>
+      </el-timeline>
     </div>
   </div>
 </template>
@@ -42,6 +55,7 @@
 export default {
   data() {
     return {
+      first:0,
       sign: 0,
       userid: 1,
       length: 0,
@@ -79,6 +93,10 @@ export default {
   },
 
   methods: {
+	  getid(){
+		  console.log(this.$parent.userid);
+		  this.userid=this.$parent.userid;
+	  },
     getQuery: function () {
       this.id = this.$route.query.ExpressInfoExpressid;
       this.expresscompany = this.$route.query.ExpressInfoExpressCompany;
@@ -94,6 +112,19 @@ export default {
           // this.polyline.setPath(this.path);
 
           var marker = new AMap.Marker();
+
+          if (this.first == 0) {
+            marker = new AMap.Marker({
+              offset: new AMap.Pixel(-13, -30),
+              icon: new AMap.Icon({
+                image:
+                  "//a.amap.com/jsapi_demos/static/demo-center/icons/dir-marker.png",
+                imageSize: new AMap.Size(135, 40),
+                imageOffset: new AMap.Pixel(-9, -3),
+              }),
+            });
+            this.first++;
+          }
           marker.setPosition(lnglat);
           this.markerList.push(marker);
           this.map.add(marker);
@@ -151,6 +182,13 @@ export default {
         };
 
         var date = this.response.Traces[i].AcceptTime.split(" ");
+
+        if (i == this.response.Traces.length - 1) {
+          this.messages[i].color = "#0bbd87";
+        } else {
+          this.messages[i].color = "";
+        }
+
         this.messages[i].time.date = date[0];
         this.messages[i].time.time = date[1];
         this.messages[i].info = this.response.Traces[i].AcceptStation;
@@ -313,7 +351,6 @@ export default {
       center: [108.152601, 30.193629],
     });
     this.geocoder = new AMap.Geocoder({});
-
     this.polyline = new AMap.Polyline({
       path: [],
       isOutline: true,
@@ -332,9 +369,9 @@ export default {
     });
     this.polyline.setMap(this.map);
     this.getQuery();
-
-    this.getInfo(this.id, this.expresscompany);
-
+	this.getid();
+    //this.getInfo(this.id, this.expresscompany);
+    this.processData();
     this.iscollect();
   },
 };
@@ -344,12 +381,13 @@ export default {
 .main {
   margin: 0 auto;
   margin-top: 70px;
-  width: 1000px;
+  width: 1100px;
   height: 800px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.12), 0 0 6px rgba(0, 0, 0, 0.04);
 }
 
 .map {
+  margin-left: 50px;
   width: 400px;
   height: 400px;
 }
@@ -367,7 +405,7 @@ export default {
   float: right;
   width: 500px;
   height: 700px;
-  border: 10px solid blue;
+  border: 10px solid #f5f8fa;
   border-radius: 30px;
   overflow-y: scroll;
 }
@@ -401,6 +439,6 @@ export default {
 
 .collect {
   margin-top: 20px;
-  margin-left: 125px;
+  margin-left: 175px;
 }
 </style>

@@ -8,10 +8,10 @@
 				<el-menu-item index="1" class="searchProcess">
 					<router-link tag="div" to="/SearchExpress">查询快递</router-link>
 				</el-menu-item>
-				<el-menu-item index="2" class="myProcess">
+				<el-menu-item index="2" class="myProcess" v-if="islogin==true">
 					<router-link tag="div" to="/MyExpress">我的快递</router-link>
 				</el-menu-item>
-				<el-menu-item index="3" class="tbProcess">
+				<el-menu-item index="3" class="tbProcess" v-if="istaobao==true">
 					<router-link tag="div" to="/TbExpress">某宝快递</router-link>
 				</el-menu-item>
 				<el-menu-item index="4" class="login" v-if="islogin==false">
@@ -25,8 +25,7 @@
 				</el-menu-item>
 			</el-menu>
 		</div>
-		<router-view></router-view>
-
+		<router-view @changestate="change()" @getuserid="getid" @changetaobao="changetaobao()"></router-view>
 	</div>
 </template>
 
@@ -34,6 +33,7 @@
 	import HelloWorld from './components/HelloWorld.vue'
 	import MyExpress from './components/MyExpress.vue'
 	import Register from './components/Register.vue'
+	import ExpressInfo from './components/ExpressInfo.vue'
 	import Push from 'push.js'
 
 	export default {
@@ -48,6 +48,8 @@
 				hasNewMessage: false,
 				activeIndex: '4',
 				islogin:false,
+				userid:-1,
+				istaobao:false,
 			}
 		},
 		created: function() {
@@ -62,6 +64,7 @@
 				this.hasNewMessage = false;
 			}
 		},
+
 		methods: {
 			handleSelect(key, keyPath) {
 				console.log(key, keyPath);
@@ -97,6 +100,20 @@
 					//icon: '/icon.png',
 					timeout: 600000,
 				});
+			},
+			change:function(){
+				this.islogin=true;
+			},
+			getid:function(evtValue){
+				this.userid=evtValue;
+			},
+			changetaobao:function(){
+				if(this.istaobao==true){
+					this.istaobao=false;
+				}else{
+					this.istaobao=true;
+				}
+				console.log(this.istaobao);
 			},
 		}
 	}

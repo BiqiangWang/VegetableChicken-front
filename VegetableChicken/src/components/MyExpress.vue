@@ -8,7 +8,7 @@
 							<p id="myExpress_id">{{nick_name}}(cid:{{user_id}})</p>
 						</el-col>
 						<el-col :span="6" :push="9">
-							<router-link :to="{path:'/MySpace'}"><el-button id="myExpress_personal">个人中心</el-button></router-link>
+							<router-link :to="{path:'/MySpace',query:{MySpaceUserid:user_id}}"><el-button id="myExpress_personal">个人中心</el-button></router-link>
 						</el-col>
 					</div>
 					<div id="myExpress_info_down">
@@ -37,7 +37,7 @@
 					</div>
 					<div id="myExpress_express_list">
 						<div class="express_item" v-for="item in express" :key="item.id">
-							<router-link :to="{path:'/ExpressInfo',query:{ExpressInfoExpressid:item.expressid,ExpressInfoExpressCompany:item.companyid}}">
+							<router-link :to="{path:'/ExpressInfo',query:{ExpressInfoExpressid:item.expressid,ExpressInfoExpressCompany:item.companyid,ExpressInfoUserid:user_id}}">
 							<div class="express_id_box">
 								<div class="express_id">
 									快递单号：{{item.expressid}}&emsp;&emsp;&emsp;&emsp;快递公司：{{item.companyid}}
@@ -92,7 +92,7 @@
 	export default {
 		data(){
 			return {
-				user_id:"1",
+				user_id:1,
 				nick_name:"panpan",
 				shipped:0,
 				received:0,
@@ -137,15 +137,19 @@
 			}
 		},
 		created:function(){
-			this.getExpressList();
+			this.getid();
 			this.getad();
 			this.getad2();
+			this.getExpressList();
 		},
 		methods:{
 			handleClick(tab, event) {
 			    console.log(tab, event);
 			 },
-			 
+			 getid(){
+				console.log("hello"+this.$parent.userid);
+				this.user_id=this.$parent.userid;
+			 },
 			 getExpressList(){
 			 	var userid = this.user_id;
 			 	this.GELajax = new XMLHttpRequest();
