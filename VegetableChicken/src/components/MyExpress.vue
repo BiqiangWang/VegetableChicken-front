@@ -64,7 +64,7 @@
 				<div id="myExpress_advertising">
 					<el-tabs v-model="activeName" @tab-click="handleClick">
 					    <el-tab-pane label="菜鸡精选" name="first">
-							<el-carousel :interval="5000" arrow="nerver" indicator-position="outside">
+							<el-carousel :interval="5000" arrow="nerver" indicator-position="outside" height="450px">
 							  <el-carousel-item v-for="(item,index) in VGselected" :key="index">
 								  <a :href="item.link">
 								  	<img class="myExpress_advertising_photo" :src="item.url"/>
@@ -73,7 +73,7 @@
 							</el-carousel>
 						</el-tab-pane>
 					    <el-tab-pane label="猜你喜欢" name="second">
-							<el-carousel :interval="5000" arrow="nerver" indicator-position="outside">
+							<el-carousel :interval="5000" arrow="nerver" indicator-position="outside" height="450px">
 							  <el-carousel-item v-for="(item,index) in VGsuggest" :key="index">
 							    <a :href="item.link">
 									<img class="myExpress_advertising_photo" :src="item.url"/>
@@ -369,7 +369,7 @@
 		border-radius: 20px;
 	}
 	.myExpress_advertising_photo{
-		height: 330px;
+		height: 450px;
 		width: 340px;
 		border-radius: 20px;
 	}

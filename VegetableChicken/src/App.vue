@@ -11,11 +11,14 @@
 				<el-menu-item index="2" class="myProcess">
 					<router-link tag="div" to="/MyExpress">我的快递</router-link>
 				</el-menu-item>
-				<el-menu-item index="3" class="login">
+				<el-menu-item index="3" class="login" v-if="islogin==false">
 					<router-link tag="div" to="/Login">登录</router-link>
 				</el-menu-item>
-				<el-menu-item index="4" class="register">
+				<el-menu-item index="4" class="register" v-if="islogin==false">
 					<router-link tag="div" to="/Register">注册</router-link>
+				</el-menu-item>
+				<el-menu-item index="5" class="myspace" v-if="islogin==true">
+					<router-link tag="div" to="/MySpace">个人中心</router-link>
 				</el-menu-item>
 			</el-menu>
 		</div>
@@ -40,7 +43,8 @@
 		data() {
 			return {
 				hasNewMessage: false,
-				activeIndex: '3'
+				activeIndex: '3',
+				islogin:true,
 			}
 		},
 		created: function() {
@@ -179,6 +183,17 @@
 		width: 78px;
 		height: 24px;
 		left: 1430px;
+		font-size: 18px;
+		line-height: 24px;
+		text-decoration-line: none;
+		color: #ffffff;
+		cursor: pointer;
+	}
+	.myspace{
+		position: absolute;
+		width: 108px;
+		height: 24px;
+		left: 1380px;
 		font-size: 18px;
 		line-height: 24px;
 		text-decoration-line: none;
