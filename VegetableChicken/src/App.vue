@@ -40,38 +40,113 @@
 		name: 'app',
 		components: {
 			HelloWorld,
-			MyExpress,
+			'MyExpress': MyExpress,
 			Register
 		},
 		data() {
 			return {
 				hasNewMessage: false,
 				activeIndex: '4',
-				islogin:false,
-				userid:-1,
-				istaobao:false,
+				islogin: true,
+				userid: 1,
+				istaobao: false,
 			}
 		},
 		created: function() {
 			this.initWebSocket();
+			this.heartbeat();
 		},
 		destroyed: function() {
 			this.websocketclose();
 		},
-		mounted: function() {
-			if (this.hasNewMessage) {
-				this.pushMessage('单号：XXXXXXX');
-				this.hasNewMessage = false;
-			}
-		},
 
 		methods: {
+			heartbeat() {
+				setInterval(this.getExpressList, 30000);
+			},
+			getExpressList() {
+				var userid = this.user_id;
+				this.GELajax = new XMLHttpRequest();
+				this.GELajax.open("GET", "http://localhost:8705/express/myexpresslist?userid=" + "1", true);
+				this.GELajax.setRequestHeader('Authorization', 'Bearer ');
+				this.GELajax.onreadystatechange = this.GELsuccessfully;
+				this.GELajax.send();
+			},
+			GELsuccessfully() {
+				if (this.GELajax.readyState == 4 && this.GELajax.status == 200) {
+					// console.log(this.GELajax.responseText);	
+					// console.log(JSON.parse(this.GELajax.responseText));
+					if (JSON.parse(this.GELajax.responseText).code == 20000) {
+						//console.log(JSON.parse(this.GELajax.responseText).data);
+						this.express = JSON.parse(this.GELajax.responseText).data.items;
+						length = JSON.parse(this.GELajax.responseText).data.items.length;
+						for (var i = 0; i < length; i++) {
+							if (JSON.parse(this.GELajax.responseText).data.items[i].expressstatus == "运输中") {
+								// 								this.pushMessage("YT5078273557325");
+								// 								this.updateExpressInfo(1, "YT5078273557325", "已签收", "客户签收人: 刘 已签收  感谢使用圆通速递，期待再次为您服务 如有疑问请联系：15186831728，投诉电话：0855-6230546");
+								// 								//this.$refs.MyExpress.getExpressList;
+								//console.log(JSON.parse(this.GELajax.responseText).data.items[i].expressid);
+								this.getExpressInfo(JSON.parse(this.GELajax.responseText).data.items[i].expressid);
+							}
+						}
+					}
+				}
+			},
+			getExpressInfo(num) {
+				this.GEIajax = new XMLHttpRequest();
+				console.log(1);
+				console.log(num);
+				this.GEIajax.open("GET", "http://localhost:8020/search/search?num=" + num + "&cid=YTO", true);
+				this.GEIajax.setRequestHeader('Authorization', 'Bearer ');
+				this.GEIajax.onreadystatechange = this.GEIsuccessfully;
+				this.GEIajax.send();
+			},
+			GEIsuccessfully() {
+				if (this.GEIajax.readyState == 4 && this.GEIajax.status == 200) {
+					console.log(JSON.parse(this.GEIajax.responseText).LogisticCode);
+					if (JSON.parse(this.GEIajax.responseText).State == '3') {
+						var uid = 1;
+						var expressid = JSON.parse(this.GEIajax.responseText).LogisticCode;
+						var status = "已签收";
+						var list = JSON.parse(this.GEIajax.responseText).Traces;
+						var info = list[list.length - 1].AcceptStation;
+						var str = "";
+						for (var j = 0; j < info.length; j++) {
+							if (
+								info[j] !== "【" &&
+								info[j] !== "】"
+							) {
+								str += info[j];
+							}
+							if (info[j] === "【") {
+								break;
+							}
+						}
+						this.updateExpressInfo(uid, expressid, status, str);
+						this.pushMessage(JSON.parse(this.GEIajax.responseText).LogisticCode);
+					}
+
+				}
+			},
+			updateExpressInfo(uid, expressid, status, detail) {
+				this.UEIajax = new XMLHttpRequest();
+				this.UEIajax.open("GET", "http://localhost:8705/express/updateexpress?userid=" + uid + "&expressid=" + expressid +
+					"&expressstatus=" + status + "&expressdetail=" + detail, true);
+				//this.UEIajax.setRequestHeader('Authorization', 'Bearer ');
+				this.UEIajax.onreadystatechange = this.UELsuccessfully;
+				this.UEIajax.send();
+			},
+			UEIsuccessfully() {
+				if (this.UEIajax.readyState == 4 && this.UEIajax.status == 200) {
+
+				}
+			},
 			handleSelect(key, keyPath) {
 				console.log(key, keyPath);
 			},
 			initWebSocket() {
 				console.log("WebSocket连接中");
-				this.websock = new WebSocket("ws:100.68.230.26:8706/zyf/websocket");
+				this.websock = new WebSocket("ws:192.168.3.2:8706/zyf/websocket");
 				this.websock.onopen = this.websocketonopen;
 				this.websock.onerror = this.websocketonerror;
 				this.websock.onmessage = this.websocketonmessage;
@@ -86,8 +161,7 @@
 			websocketonmessage(e) {
 				var da = e.data;
 				console.log(da);
-				this.hasNewMessage = true;
-				this.pushMessage('单号：XXXXXXX');
+				this.pushMessage('单号：' + da);
 			},
 			websocketclose(e) {
 				console.log("connection closed (" + e.code + ")");
@@ -101,19 +175,18 @@
 					timeout: 600000,
 				});
 			},
-			change:function(){
-				this.islogin=true;
+			change: function() {
+				this.islogin = true;
 			},
-			getid:function(evtValue){
-				this.userid=evtValue;
+			getid: function(evtValue) {
+				this.userid = evtValue;
 			},
-			changetaobao:function(){
-				if(this.istaobao==true){
-					this.istaobao=false;
-				}else{
-					this.istaobao=true;
+			changetaobao: function() {
+				if (this.istaobao == true) {
+					this.istaobao = false;
+				} else {
+					this.istaobao = true;
 				}
-				console.log(this.istaobao);
 			},
 		}
 	}
@@ -185,7 +258,7 @@
 		color: #ffffff;
 		cursor: pointer;
 	}
-	
+
 	.tbProcess {
 		position: absolute;
 		width: 112px;
@@ -221,7 +294,8 @@
 		color: #ffffff;
 		cursor: pointer;
 	}
-	.myspace{
+
+	.myspace {
 		position: absolute;
 		width: 108px;
 		height: 24px;
